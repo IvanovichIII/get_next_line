@@ -6,7 +6,7 @@
 /*   By: ivan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 01:19:55 by ivan              #+#    #+#             */
-/*   Updated: 2024/03/21 21:10:49 by ivan             ###   ########.fr       */
+/*   Updated: 2024/03/21 21:58:55 by ivan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ char	*ft_read_file(int fd, char *file)
 	char	*buff;
 	int		byte;
 
-	buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!file)
 		file = ft_calloc(1, 1);
+	buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	byte = 1;
 	while (byte > 0)
 	{
@@ -83,7 +83,7 @@ char	*ft_read_file(int fd, char *file)
 			free(buff);
 			return (NULL);
 		}
-		buff[BUFFER_SIZE - 1] = 0;
+		buff[byte] = 0;
 		file = ft_joinfreefile(file, buff);
 		if (ft_strchr(file, '\n'))
 			break ;
