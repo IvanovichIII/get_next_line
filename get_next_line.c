@@ -6,14 +6,14 @@
 /*   By: ivan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 01:19:55 by ivan              #+#    #+#             */
-/*   Updated: 2024/03/21 20:09:21 by ivan             ###   ########.fr       */
+/*   Updated: 2024/03/21 20:27:23 by ivan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-char	*joinfreefile(char *buffer, char *buff)
+char	*ft_joinfreefile(char *buffer, char *buff)
 {
 	char	*buff_t;
 
@@ -22,7 +22,27 @@ char	*joinfreefile(char *buffer, char *buff)
 	return (buff_t);
 }
 
-char	*read_file(int fd, char *file)
+char	*ft_line(char *buff)
+{
+	char	*line;
+	int		i;
+
+	if (!*buff)
+		return (NULL);
+	while (buff[i] && buff[i] != '\n')
+		i++;
+	line = ft_calloc(i + 2, sizeof(char));
+	i = 0;
+	while (buff[i] && buff[i] != '\n')
+	{
+		line[i] = buff[i];
+		i++;
+	}
+	line[i] = '\n';
+	return (line);
+}
+
+char	*ft_read_file(int fd, char *file)
 {
 	char	*buff;
 	int		byte;
@@ -40,7 +60,7 @@ char	*read_file(int fd, char *file)
 			return (NULL);
 		}
 		buff[BUFFER_SIZE - 1] = 0;
-		file = joinfreefile(file, buff);
+		file = ft_joinfreefile(file, buff);
 		if (ft_strchr(file, '\n'))
 			break ;
 	}
@@ -50,14 +70,16 @@ char	*read_file(int fd, char *file)
 char	*get_next_line(int fd)
 {
 	char	*file;
+	char    *line;
 
 	file = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd,0 , 0) < 0)
 		return (NULL);
-	file = read_file(fd, file);
+	file = ft_read_file(fd, file);
 	if (!file)
 		return (NULL);
-	return (file);
+	line = ft_line(file);
+	return (line);
 }
 
 int     main(int argc, char *argv[])
