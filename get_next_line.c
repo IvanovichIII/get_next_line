@@ -6,7 +6,7 @@
 /*   By: ivan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 01:19:55 by ivan              #+#    #+#             */
-/*   Updated: 2024/03/21 20:27:23 by ivan             ###   ########.fr       */
+/*   Updated: 2024/03/21 21:10:49 by ivan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,29 @@ char	*ft_joinfreefile(char *buffer, char *buff)
 	return (buff_t);
 }
 
+char	*ft_nextline(char *buff)
+{
+	int		i;
+	int		j;
+	char	*line;
+
+	i = 0;
+	while (buff[i] && buff[i] != '\n')
+		i++;
+	if (!buff[i])
+	{
+		free(buff);
+		return (NULL);
+	}
+	line = ft_calloc(ft_strlen(buff) - i + 1, sizeof(char));
+	j = 0;
+	i++;
+	while (buff[i])
+		line[j++] = buff[i++];
+	free(buff);
+	return (line);
+}
+
 char	*ft_line(char *buff)
 {
 	char	*line;
@@ -29,6 +52,7 @@ char	*ft_line(char *buff)
 
 	if (!*buff)
 		return (NULL);
+	i = 0;
 	while (buff[i] && buff[i] != '\n')
 		i++;
 	line = ft_calloc(i + 2, sizeof(char));
@@ -67,33 +91,37 @@ char	*ft_read_file(int fd, char *file)
 	free(buff);
 	return (file);
 }
+
 char	*get_next_line(int fd)
 {
-	char	*file;
-	char    *line;
+	static char	*file;
+	char		*line;
 
-	file = NULL;
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd,0 , 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
 	file = ft_read_file(fd, file);
 	if (!file)
 		return (NULL);
 	line = ft_line(file);
+	file = ft_nextline(file);
 	return (line);
 }
-
-int     main(int argc, char *argv[])
+/*
+int	main(int argc, char *argv[])
 {
-        char    *line;
-        int             file;
+	char	*line;
+	int		file;
 
-        if (argc != 2)
-                return (1);
-        file = open(argv[1], O_RDONLY);
-        line = get_next_line(file);
-        printf("%s", line);
-        line = get_next_line(file);
-        printf("%s", line);
-        line = get_next_line(file);
-        printf("%s", line);
+	if (argc != 2)
+		return (1);
+	file = open(argv[1], O_RDONLY);
+	line = get_next_line(file);
+	printf("%s", line);
+	line = get_next_line(file);
+	printf("%s", line);
+	line = get_next_line(file);
+	printf("%s", line);
+	line = get_next_line(file);
+	printf("%s", line);
 }
+*/
