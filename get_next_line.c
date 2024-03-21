@@ -6,77 +6,72 @@
 /*   By: ivan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 01:19:55 by ivan              #+#    #+#             */
-/*   Updated: 2024/03/18 03:51:48 by ivan             ###   ########.fr       */
+/*   Updated: 2024/03/21 20:09:21 by ivan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-void	print_line(char *ptr)
+char	*joinfreefile(char *buffer, char *buff)
 {
-	while (*ptr && *ptr != '\n')
-		write(1, ptr++, 1);
+	char	*buff_t;
+
+	buff_t = ft_strjoin(buffer, buff);
+	free(buffer);
+	return (buff_t);
 }
 
-int	ft_str_line_len(const char *ptr, size_t buff_size)
+char	*read_file(int fd, char *file)
 {
-	int	i;
+	char	*buff;
+	int		byte;
 
-	i = 0;
-	while (*ptr && *ptr != '\n' && buff_size > 0)
+	buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	if (!file)
+		file = ft_calloc(1, 1);
+	byte = 1;
+	while (byte > 0)
 	{
-		ptr++;
-		i++;
-		buff_size--;
+		byte = read(fd, buff, BUFFER_SIZE);
+		if (byte == -1)
+		{
+			free(buff);
+			return (NULL);
+		}
+		buff[BUFFER_SIZE - 1] = 0;
+		file = joinfreefile(file, buff);
+		if (ft_strchr(file, '\n'))
+			break ;
 	}
-	if (*ptr || *ptr == '\n')
-		return (i + 1);
-	return (-1);
+	free(buff);
+	return (file);
 }
-
-void	*ft_realloc(int fd, size_t buff_size)
-{
-	char	*ptr;
-	int		len;
-	int		read_byt;
-
-	ptr = malloc(buff_size * sizeof(char));
-	if (!ptr)
-		return (NULL);
-	read_byt = read(fd, ptr, buff_size);
-	if (read_byt < 0)
-		return (NULL);
-	len = ft_str_line_len(ptr, buff_size);
-	if (len == -1)
-	{
-		free (ptr);
-		return (NULL);
-	}
-	return (ptr);
-}
-
 char	*get_next_line(int fd)
 {
-	char	*ptr;
-	size_t	buff_size;
+	char	*file;
 
-	buff_size = BUFF_MIN_SIZE;
-	ptr = ft_realloc(fd, buff_size);
-	while (!ptr)
-	{
-		write (1, "\ncaracola\n", 10);
- 		ptr = ft_realloc(fd, buff_size * 2);
-	}
-	return (ptr);
+	file = NULL;
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd,0 , 0) < 0)
+		return (NULL);
+	file = read_file(fd, file);
+	if (!file)
+		return (NULL);
+	return (file);
 }
 
-int	main(int argc, char *argv[])
+int     main(int argc, char *argv[])
 {
-	int	fd;
-	char	*ptr;
+        char    *line;
+        int             file;
 
-	fd = open(argv[1], O_RDONLY);
-	ptr = get_next_line(fd);
-	print_line(ptr);
-	close(fd);
+        if (argc != 2)
+                return (1);
+        file = open(argv[1], O_RDONLY);
+        line = get_next_line(file);
+        printf("%s", line);
+        line = get_next_line(file);
+        printf("%s", line);
+        line = get_next_line(file);
+        printf("%s", line);
 }
