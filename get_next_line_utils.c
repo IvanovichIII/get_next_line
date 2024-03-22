@@ -12,16 +12,13 @@
 
 #include "get_next_line.h"
 
-int	ft_strlen(const char *str)
+size_t	ft_strlen(const char *theString)
 {
 	int	i;
 
 	i = 0;
-	while (*str)
-	{
-		str++;
+	while (theString[i])
 		i++;
-	}
 	return (i);
 }
 
@@ -67,31 +64,26 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-char	*ft_strchr(const char *str, int c)
+char	*ft_strchr(const char *string, int searchedChar )
 {
-	while (*str)
-	{
-		if (*str == (char)c)
-		{
-			return ((char *)str);
-		}
+	char	*str;
+
+	str = (char *)string;
+	while (*str != searchedChar && *str != 0)
 		str++;
-	}
-	if ((char)c == '\0')
-		return ((char *)str);
-	return (NULL);
+	if (*str == searchedChar)
+		return (str);
+	else
+		return (NULL);
 }
 
-void	*ft_calloc(size_t num, size_t size)
+void	*ft_calloc(size_t elementCount, size_t elementSize)
 {
-	void	*ptr;
+	char	*res;
 
-	ptr = malloc(num * size);
-	if (!ptr)
+	res = malloc(elementSize * elementCount);
+	if (!res)
 		return (NULL);
-	else
-	{
-		ft_bzero(ptr, (num * size));
-		return (ptr);
-	}
+	ft_bzero(res, elementSize * elementCount);
+	return (res);
 }
