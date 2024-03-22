@@ -50,7 +50,7 @@ char	*ft_line(char *buff)
 	char	*line;
 	int		i;
 
-	if (!*buff)
+	if (!buff[i])
 		return (NULL);
 	i = 0;
 	while (buff[i] && buff[i] != '\n')
