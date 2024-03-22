@@ -50,9 +50,9 @@ char	*ft_line(char *buff)
 	char	*line;
 	int		i;
 
+	i = 0;
 	if (!buff[i])
 		return (NULL);
-	i = 0;
 	while (buff[i] && buff[i] != '\n')
 		i++;
 	line = ft_calloc(i + 2, sizeof(char));
