@@ -6,7 +6,7 @@
 /*   By: ivan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 18:55:43 by ivan              #+#    #+#             */
-/*   Updated: 2024/03/21 19:34:40 by ivan             ###   ########.fr       */
+/*   Updated: 2024/03/23 11:39:59 by igomez-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,11 @@ void	*ft_calloc(size_t elementCount, size_t elementSize)
 	res = malloc(elementSize * elementCount);
 	if (!res)
 		return (NULL);
-	ft_bzero(res, elementSize * elementCount);
-	return (res);
+	else
+	{
+		ft_bzero(res, elementSize * elementCount);
+		return (res);
+	}
 }
 
 size_t	ft_strlen(const char *theString)

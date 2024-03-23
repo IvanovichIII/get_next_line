@@ -6,7 +6,7 @@
 /*   By: ivan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 01:19:55 by ivan              #+#    #+#             */
-/*   Updated: 2024/03/21 21:58:55 by ivan             ###   ########.fr       */
+/*   Updated: 2024/03/23 12:49:17 by igomez-s         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ char	*ft_line(char *buff)
 		line[i] = buff[i];
 		i++;
 	}
-	line[i] = '\n';
+	if (buff[i] && buff[i] == '\n')
+		line[i] = '\n';
 	return (line);
 }
 
@@ -81,6 +82,7 @@ char	*ft_read_file(int fd, char *file)
 		if (byte == -1)
 		{
 			free(buff);
+			free(file);
 			return (NULL);
 		}
 		buff[byte] = 0;
@@ -97,7 +99,7 @@ char	*get_next_line(int fd)
 	static char	*file;
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	file = ft_read_file(fd, file);
 	if (!file)
@@ -106,22 +108,3 @@ char	*get_next_line(int fd)
 	file = ft_nextline(file);
 	return (line);
 }
-/*
-int	main(int argc, char *argv[])
-{
-	char	*line;
-	int		file;
-
-	if (argc != 2)
-		return (1);
-	file = open(argv[1], O_RDONLY);
-	line = get_next_line(file);
-	printf("%s", line);
-	line = get_next_line(file);
-	printf("%s", line);
-	line = get_next_line(file);
-	printf("%s", line);
-	line = get_next_line(file);
-	printf("%s", line);
-}
-*/
